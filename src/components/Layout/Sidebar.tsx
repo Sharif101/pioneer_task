@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { IoCheckmarkDone, IoPersonCircle } from "react-icons/io5";
-import { LogOut, Home, CheckSquare, User } from "lucide-react";
+import { LogOut, Home } from "lucide-react";
+import profilePic from "../../asstes/Ellipse 1.png";
+import Image from "next/image";
 
 const menuItems = [
   {
@@ -33,11 +35,13 @@ export function Sidebar() {
     <div className="w-72 bg-gradient-to-b from-blue-900 to-blue-950 text-white flex flex-col">
       {/* Profile Section */}
       <div className="p-6 text-center border-b border-blue-800">
-        <div className="w-24 h-24 mx-auto mb-3 rounded-lg border-4 border-pink-500 overflow-hidden bg-gray-300">
-          <img
-            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop"
+        <div className="w-24 h-24 mx-auto mb-3 rounded-full border-2 border-white-500 overflow-hidden relative">
+          <Image
+            src={profilePic}
             alt="Profile"
-            className="w-full h-full object-cover"
+            width={96} // 24 * 4 = 96px
+            height={96}
+            className="object-cover rounded-full"
           />
         </div>
         <h3 className="font-semibold text-lg">amanuael</h3>
