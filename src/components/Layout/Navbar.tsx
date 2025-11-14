@@ -1,37 +1,29 @@
-import { CiGlobe } from "react-icons/ci";
-import { FaRegBell } from "react-icons/fa";
-import { FiHelpCircle } from "react-icons/fi";
-import { IoIosArrowDown } from "react-icons/io";
+"use client";
+
+import { Bell, Calendar } from "lucide-react";
 
 export function Navbar() {
   return (
-    <div className="border-b bg-white p-6 px-8 flex items-center justify-between">
-      <h1 className="text-2xl font-bold text-red-500">Logo</h1>
-
-      <div className="flex items-center gap-10">
-        <div className="flex items-center gap-2">
-          <CiGlobe className="w-5 h-5 text-gray-600" />
-          <span className="text-sm text-gray-700">EN</span>
-          <IoIosArrowDown className="w-5 h-5 text-gray-600" />
+    <div className="h-20 bg-white border-b border-gray-200 flex items-center justify-between px-8">
+      {/* Logo */}
+      <div className="flex items-center">
+        <div>
+          <div className="font-bold text-gray-800">DREAMY</div>
+          <div className="text-xs text-gray-600">SOFTWARE</div>
         </div>
+      </div>
 
-        <div className="flex items-center gap-2">
-          <FiHelpCircle className="w-5 h-5 text-gray-600" />
-          <span className="text-sm text-gray-700">Help</span>
-        </div>
-
-        <div className="relative border border-solid border-gray-300 p-1 rounded">
-          <FaRegBell className="w-5 h-5 text-gray-500" />
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-1 rounded-full">
-            2
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-sm font-medium text-gray-600">
-            JD
-          </div>
-          <span className="text-sm font-medium text-gray-800">John Doe</span>
-          <IoIosArrowDown className="w-5 h-5 text-gray-600" />
+      {/* Right Side Actions */}
+      <div className="flex items-center gap-3">
+        <button className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors">
+          <Bell className="w-5 h-5 text-white" />
+        </button>
+        <button className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors">
+          <Calendar className="w-5 h-5 text-white" />
+        </button>
+        <div className="ml-3 text-right">
+          <div className="font-semibold text-gray-800">Friday</div>
+          <div className="text-sm text-gray-600">07/11/2025</div>
         </div>
       </div>
     </div>
