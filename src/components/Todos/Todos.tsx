@@ -4,6 +4,7 @@ import { Plus, Search, Filter } from "lucide-react";
 import React, { useState } from "react";
 import noDataPic from "../../asstes/icon-no projects.png";
 import Image from "next/image";
+import AddTaskModal from "./AddTaskModal/AddTaskModal";
 
 export default function Todos() {
   const [showFilterMenu, setShowFilterMenu] = useState(false);
@@ -13,6 +14,7 @@ export default function Todos() {
     expires10Days: false,
     expires30Days: false,
   });
+  const [showAddTaskModal, setShowAddTaskModal] = useState(false);
 
   return (
     <div className="h-full flex flex-col p-6">
@@ -20,7 +22,10 @@ export default function Todos() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-bold text-gray-800">Todos</h1>
-          <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer">
+          <button
+            onClick={() => setShowAddTaskModal(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer"
+          >
             <Plus className="w-5 h-5" />
             New Task
           </button>
@@ -142,6 +147,11 @@ export default function Todos() {
           </div>
         </div>
       </div>
+      {/* Add Task Modal */}
+      <AddTaskModal
+        open={showAddTaskModal}
+        onOpenChange={setShowAddTaskModal}
+      />
     </div>
   );
 }
