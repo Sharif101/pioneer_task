@@ -23,7 +23,7 @@ const menuItems = [
   {
     id: 4,
     label: "Account Information",
-    href: "#",
+    href: "/dashboard/acountinfo",
     icon: IoPersonCircle,
   },
 ];
