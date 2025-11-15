@@ -8,6 +8,8 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
 import regPic from "../../asstes/reg.png";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 export default function RegisterForm() {
   const [firstName, setFirstName] = useState("");
@@ -19,6 +21,9 @@ export default function RegisterForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,10 +42,37 @@ export default function RegisterForm() {
       return;
     }
 
-    setTimeout(() => {
+    try {
+      const res = await fetch(`${API_URL}/api/users/signup/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          first_name: firstName,
+          last_name: lastName,
+          email: email,
+          password: password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.detail || "Registration failed.");
+        setIsLoading(false);
+        return;
+      }
+
+      console.log({ data });
+
+      toast.success("Account created successfully!");
+      router.push("/");
+    } catch (error) {
+      toast.error("Something went wrong. Try again.");
+    } finally {
       setIsLoading(false);
-      alert(`Account created for ${firstName} ${lastName}`);
-    }, 1000);
+    }
   };
 
   return (
