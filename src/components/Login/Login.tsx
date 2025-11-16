@@ -11,6 +11,7 @@ import loginPic from "../../asstes/image.png";
 import Image from "next/image";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Login() {
   const router = useRouter();
@@ -20,6 +21,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { login } = useAuth();
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -27,7 +29,6 @@ export default function Login() {
     e.preventDefault();
     setIsLoading(true);
 
-    // Basic validation
     if (!email || !password) {
       toast.error("Please fill in all fields.");
       setIsLoading(false);
@@ -50,6 +51,8 @@ export default function Login() {
       }
 
       toast.success("Login successful!");
+      login(data.access);
+      router.push("/dashboard/todos");
       console.log({ data });
     } catch (error) {
       toast.error("Something went wrong!");
