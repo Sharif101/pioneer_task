@@ -9,30 +9,58 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Checkbox } from "../ui/checkbox";
 import loginPic from "../../asstes/image.png";
 import Image from "next/image";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError("");
 
+    // Basic validation
     if (!email || !password) {
-      setError("Please fill in all fields.");
+      toast.error("Please fill in all fields.");
       setIsLoading(false);
       return;
     }
 
-    setTimeout(() => {
+    try {
+      const res = await fetch(`${API_URL}/api/auth/login/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message || "Invalid credentials!");
+        setIsLoading(false);
+        return;
+      }
+
+      // Save token (if needed)
+      // if (data?.token) {
+      //   localStorage.setItem("todo_access_token", data.token);
+      // }
+
+      toast.success("Login successful!");
+      console.log({ data });
+    } catch (error) {
+      toast.error("Something went wrong!");
+    } finally {
       setIsLoading(false);
-      alert(`Logged in as ${email}`);
-    }, 1000);
+    }
   };
 
   return (
@@ -118,8 +146,6 @@ export default function Login() {
               Forgot your password?
             </Link>
           </div>
-
-          {error && <p className="text-red-500 text-sm">{error}</p>}
 
           <Button
             type="submit"
