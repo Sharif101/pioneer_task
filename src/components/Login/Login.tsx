@@ -15,13 +15,16 @@ import { useAuth } from "@/context/AuthContext";
 
 export default function Login() {
   const router = useRouter();
+  const { login } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
+    {}
+  );
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -29,11 +32,20 @@ export default function Login() {
     e.preventDefault();
     setIsLoading(true);
 
-    if (!email || !password) {
-      toast.error("Please fill in all fields.");
+    // Field-level validation
+    const newErrors: any = {};
+
+    if (!email) newErrors.email = "Email is required.";
+    if (!password) newErrors.password = "Password is required.";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      toast.error("Please fix the errors.");
       setIsLoading(false);
       return;
     }
+
+    setErrors({}); // clear old errors
 
     try {
       const res = await fetch(`${API_URL}/api/auth/login/`, {
@@ -67,7 +79,7 @@ export default function Login() {
       <div className="hidden lg:flex lg:w-1/2 bg-[#E2ECF8] items-center justify-center relative">
         <Image
           src={loginPic}
-          alt="Registration illustration"
+          alt="Login illustration"
           fill
           className="object-contain"
           priority
@@ -86,6 +98,7 @@ export default function Login() {
             </p>
           </div>
 
+          {/* Email */}
           <div className="space-y-2">
             <Label htmlFor="email" className="text-gray-700 font-medium">
               Email
@@ -96,10 +109,16 @@ export default function Login() {
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="border-gray-300 rounded-sm"
+              className={`border-gray-300 rounded-sm ${
+                errors.email ? "border-red-500" : ""
+              }`}
             />
+            {errors.email && (
+              <p className="text-red-500 text-sm">{errors.email}</p>
+            )}
           </div>
 
+          {/* Password */}
           <div className="space-y-2 relative">
             <Label htmlFor="password" className="text-gray-700 font-medium">
               Password
@@ -111,7 +130,9 @@ export default function Login() {
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="border-gray-300 rounded-sm pr-10"
+                className={`border-gray-300 rounded-sm pr-10 ${
+                  errors.password ? "border-red-500" : ""
+                }`}
               />
               <button
                 type="button"
@@ -121,8 +142,12 @@ export default function Login() {
                 {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
               </button>
             </div>
+            {errors.password && (
+              <p className="text-red-500 text-sm">{errors.password}</p>
+            )}
           </div>
 
+          {/* Remember Me */}
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Checkbox
@@ -145,6 +170,7 @@ export default function Login() {
             </Link>
           </div>
 
+          {/* Submit Button */}
           <Button
             type="submit"
             disabled={isLoading}
