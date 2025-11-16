@@ -9,15 +9,16 @@ export default function ProtectedRoute({
 }: {
   children: React.ReactNode;
 }) {
-  const { token } = useAuth();
+  const { token, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!token) {
+    if (!loading && !token) {
       router.replace("/");
     }
-  }, [token]);
+  }, [loading, token]);
 
+  if (loading) return null;
   if (!token) return null;
 
   return <>{children}</>;

@@ -7,13 +7,17 @@ const AuthContext = createContext<any>(null);
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const savedToken = localStorage.getItem("token");
+
     if (savedToken) {
       setToken(savedToken);
       fetchUser(savedToken);
     }
+
+    setLoading(false);
   }, []);
 
   const login = (accessToken: string) => {
@@ -53,7 +57,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ token, user, login, logout, fetchUser }}>
+    <AuthContext.Provider
+      value={{
+        token,
+        user,
+        login,
+        logout,
+        loading,
+        isAuthenticated: !!token,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
