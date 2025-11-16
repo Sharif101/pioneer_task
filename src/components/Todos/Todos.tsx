@@ -2,36 +2,49 @@
 
 import { Plus, Search, Filter } from "lucide-react";
 import React, { useState } from "react";
-import noDataPic from "../../asstes/icon-no projects.png";
 import Image from "next/image";
+import noDataPic from "../../asstes/icon-no projects.png";
 import AddTaskModal from "./AddTaskModal/AddTaskModal";
+import { Todo } from "@/utils/types/todo";
+import TodoCard from "@/Resources/TodoCard";
 
-export default function Todos() {
+interface TodosProps {
+  todos: Todo[];
+}
+
+interface Filters {
+  deadlineToday: boolean;
+  expires5Days: boolean;
+  expires10Days: boolean;
+  expires30Days: boolean;
+}
+
+export default function Todos({ todos }: TodosProps) {
+  const [showAddTaskModal, setShowAddTaskModal] = useState(false);
   const [showFilterMenu, setShowFilterMenu] = useState(false);
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<Filters>({
     deadlineToday: false,
     expires5Days: false,
     expires10Days: false,
     expires30Days: false,
   });
-  const [showAddTaskModal, setShowAddTaskModal] = useState(false);
 
   return (
     <div className="h-full flex flex-col p-6">
-      {/* Header Section */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-6">
+      {/* Header */}
+      <div className="mb-6 flex flex-col gap-4">
+        <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold text-gray-800">Todos</h1>
           <button
             onClick={() => setShowAddTaskModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             <Plus className="w-5 h-5" />
             New Task
           </button>
         </div>
 
-        {/* Search Bar */}
+        {/* Search & Filter */}
         <div className="flex gap-3">
           <div className="flex-1 relative">
             <input
@@ -44,7 +57,6 @@ export default function Todos() {
             </button>
           </div>
 
-          {/* Filter Button */}
           <div className="relative">
             <button
               onClick={() => setShowFilterMenu(!showFilterMenu)}
@@ -54,77 +66,32 @@ export default function Todos() {
               <span className="text-gray-700">Filter</span>
             </button>
 
-            {/* Filter Dropdown Menu */}
             {showFilterMenu && (
               <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-10">
                 <div className="px-4 py-2 border-b border-gray-200">
                   <p className="text-sm font-semibold text-gray-700">Date</p>
                 </div>
                 <div className="py-2">
-                  <label className="flex items-center px-4 py-2 hover:bg-gray-50 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={filters.deadlineToday}
-                      onChange={(e) =>
-                        setFilters({
-                          ...filters,
-                          deadlineToday: e.target.checked,
-                        })
-                      }
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <span className="ml-3 text-sm text-gray-700">
-                      Deadline Today
-                    </span>
-                  </label>
-                  <label className="flex items-center px-4 py-2 hover:bg-gray-50 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={filters.expires5Days}
-                      onChange={(e) =>
-                        setFilters({
-                          ...filters,
-                          expires5Days: e.target.checked,
-                        })
-                      }
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <span className="ml-3 text-sm text-gray-700">
-                      Expires in 5 days
-                    </span>
-                  </label>
-                  <label className="flex items-center px-4 py-2 hover:bg-gray-50 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={filters.expires10Days}
-                      onChange={(e) =>
-                        setFilters({
-                          ...filters,
-                          expires10Days: e.target.checked,
-                        })
-                      }
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <span className="ml-3 text-sm text-gray-700">
-                      Expires in 10 days
-                    </span>
-                  </label>
-                  <label className="flex items-center px-4 py-2 hover:bg-gray-50 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={filters.expires30Days}
-                      onChange={(e) =>
-                        setFilters({
-                          ...filters,
-                          expires30Days: e.target.checked,
-                        })
-                      }
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                    />
-                    <span className="ml-3 text-sm text-gray-700">
-                      Expires in 30 days
-                    </span>
-                  </label>
+                  {Object.entries(filters).map(([key, value]) => (
+                    <label
+                      key={key}
+                      className="flex items-center px-4 py-2 hover:bg-gray-50 cursor-pointer"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={value}
+                        onChange={(e) =>
+                          setFilters({ ...filters, [key]: e.target.checked })
+                        }
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="ml-3 text-sm text-gray-700">
+                        {key
+                          .replace(/([A-Z])/g, " $1")
+                          .replace(/^./, (str) => str.toUpperCase())}
+                      </span>
+                    </label>
+                  ))}
                 </div>
               </div>
             )}
@@ -132,21 +99,36 @@ export default function Todos() {
         </div>
       </div>
 
-      {/* Empty State */}
-      <div className="flex-1 flex items-center justify-center">
-        <div className="w-full h-full bg-white flex items-center justify-center rounded-xl shadow-sm p-4">
-          <div className="text-center space-y-3">
-            <Image
-              src={noDataPic}
-              alt="No Data"
-              className="mx-auto"
-              width={200}
-              height={200}
-            />
-            <p className="text-xl font-medium text-gray-800">No todos yet</p>
+      {/* Todos List / Empty State */}
+      {todos.length === 0 ? (
+        <div className="flex-1 flex items-center justify-center">
+          <div className="w-full h-full bg-white flex items-center justify-center rounded-xl shadow-sm p-4">
+            <div className="text-center space-y-3">
+              <Image
+                src={noDataPic}
+                alt="No Data"
+                className="mx-auto"
+                width={200}
+                height={200}
+              />
+              <p className="text-xl font-medium text-gray-800">No todos yet</p>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="flex flex-col gap-4">
+          {todos.map((todo) => (
+            <TodoCard
+              key={todo.id}
+              title={todo.title}
+              description={todo.description}
+              dueDate={todo.todo_date}
+              priority={todo.priority as "extreme" | "moderate" | "low"}
+            />
+          ))}
+        </div>
+      )}
+
       {/* Add Task Modal */}
       <AddTaskModal
         open={showAddTaskModal}
