@@ -1,54 +1,59 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 
-interface AuthContextType {
-  token: string | null;
-  user: any;
-  login: (token: string, userData?: any) => void;
-  logout: () => void;
-}
-
-const AuthContext = createContext<AuthContextType>({
-  token: null,
-  user: null,
-  login: () => {},
-  logout: () => {},
-});
+const AuthContext = createContext<any>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<any>(null);
 
-  // Load token from localStorage (SSR Safe — client only)
   useEffect(() => {
     const savedToken = localStorage.getItem("token");
-    const savedUser = localStorage.getItem("user");
-
-    if (savedToken) setToken(savedToken);
-    if (savedUser) setUser(JSON.parse(savedUser));
+    if (savedToken) {
+      setToken(savedToken);
+      fetchUser(savedToken);
+    }
   }, []);
 
-  const login = (token: string, userData?: any) => {
-    localStorage.setItem("token", token);
-    if (userData) localStorage.setItem("user", JSON.stringify(userData));
-
-    setToken(token);
-    if (userData) setUser(userData);
+  const login = (accessToken: string) => {
+    localStorage.setItem("token", accessToken);
+    setToken(accessToken);
+    fetchUser(accessToken);
   };
 
   const logout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
     setToken(null);
     setUser(null);
-    router.push("/");
+  };
+
+  const fetchUser = async (authToken: string) => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/users/me/`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+
+      if (!res.ok) {
+        console.log("Failed to fetch user");
+        return;
+      }
+
+      const data = await res.json();
+      setUser(data);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ token, user, login, logout }}>
+    <AuthContext.Provider value={{ token, user, login, logout, fetchUser }}>
       {children}
     </AuthContext.Provider>
   );

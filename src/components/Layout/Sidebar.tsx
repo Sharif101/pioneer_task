@@ -31,7 +31,7 @@ const menuItems = [
 
 export function Sidebar() {
   const pathname = usePathname();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   return (
     <div className="w-72 bg-gradient-to-b from-blue-900 to-blue-950 text-white flex flex-col">
@@ -45,8 +45,10 @@ export function Sidebar() {
             className="object-cover rounded-full"
           />
         </div>
-        <h3 className="font-semibold text-lg">amanuael</h3>
-        <p className="text-sm text-blue-300">amanuael@gmail.com</p>
+        <h3 className="font-semibold text-lg">
+          {user?.first_name} {user?.last_name}
+        </h3>
+        <p className="text-sm text-blue-300">{user?.email}</p>
       </div>
 
       <nav className="flex-1 py-6 space-y-1">
