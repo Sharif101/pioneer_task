@@ -49,11 +49,6 @@ export default function Login() {
         return;
       }
 
-      // Save token (if needed)
-      // if (data?.token) {
-      //   localStorage.setItem("todo_access_token", data.token);
-      // }
-
       toast.success("Login successful!");
       console.log({ data });
     } catch (error) {
