@@ -11,6 +11,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { toast } from "react-toastify";
+import { useAuth } from "@/context/AuthContext";
 
 interface AddTaskModalProps {
   open: boolean;
@@ -28,9 +30,44 @@ export default function AddTaskModal({
     description: "",
   });
 
-  const handleSubmit = () => {
-    console.log("Task created:", formData);
-    onOpenChange(false);
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const { token } = useAuth();
+
+  const handleSubmit = async () => {
+    if (!formData.title || !formData.date || !formData.priority) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/api/todos/`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          // "Content-Type": "application/json" is not needed for formdata
+        },
+        body: new URLSearchParams({
+          title: formData.title,
+          description: formData.description,
+          priority: formData.priority,
+          todo_date: formData.date,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create todo");
+      }
+
+      const data = await response.json();
+      toast.success("Todo created successfully!");
+      console.log("Created Todo:", data);
+
+      // Reset form and close modal
+      setFormData({ title: "", date: "", priority: "", description: "" });
+    } catch (error) {
+      console.error(error);
+      toast.error("Error creating todo");
+    }
   };
 
   const handleDelete = () => {
@@ -150,7 +187,7 @@ export default function AddTaskModal({
         <div className="px-6 py-4 border-t flex items-center justify-between">
           <button
             onClick={handleSubmit}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium cursor-pointer"
           >
             Done
           </button>
