@@ -82,25 +82,28 @@ export default function AddTaskModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] p-0">
+      <DialogContent className="sm:max-w-[600px] p-0 rounded-xl overflow-hidden">
         {/* Header */}
-        <DialogHeader className="px-6 pt-6 pb-4 border-b">
+        <DialogHeader className="px-8 pt-8 pb-5 border-b">
           <div className="flex items-center justify-between">
             <DialogTitle className="text-xl font-semibold">
               Add New Task
             </DialogTitle>
             <button
               onClick={() => onOpenChange(false)}
-              className="text-sm font-medium text-gray-700 hover:text-gray-900 underline"
+              className="text-sm font-medium text-gray-600 hover:text-gray-900 underline"
             >
               Go Back
             </button>
           </div>
         </DialogHeader>
 
-        <div className="px-6 py-6 space-y-5">
+        {/* Content Area */}
+        <div className="px-8 py-3 space-y-6">
           <div>
-            <Label htmlFor="title">Title</Label>
+            <Label htmlFor="title" className="mb-1 block">
+              Title
+            </Label>
             <Input
               id="title"
               type="text"
@@ -109,11 +112,14 @@ export default function AddTaskModal({
                 setFormData({ ...formData, title: e.target.value })
               }
               placeholder="Enter task title"
+              className="h-12"
             />
           </div>
 
           <div>
-            <Label htmlFor="date">Date</Label>
+            <Label htmlFor="date" className="mb-1 block">
+              Date
+            </Label>
             <div className="relative">
               <Input
                 id="date"
@@ -122,14 +128,14 @@ export default function AddTaskModal({
                 onChange={(e) =>
                   setFormData({ ...formData, date: e.target.value })
                 }
+                className="h-12 pr-10"
               />
-              <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
             </div>
           </div>
 
           <div>
-            <Label>Priority</Label>
-            <div className="flex gap-6 mt-1">
+            <Label className="mb-1 block">Priority</Label>
+            <div className="flex gap-8 mt-2">
               {["extreme", "moderate", "low"].map((p) => (
                 <label key={p} className="flex items-center cursor-pointer">
                   <input
@@ -166,7 +172,9 @@ export default function AddTaskModal({
           </div>
 
           <div>
-            <Label htmlFor="description">Task Description</Label>
+            <Label htmlFor="description" className="mb-1 block">
+              Task Description
+            </Label>
             <Textarea
               id="description"
               value={formData.description}
@@ -175,20 +183,23 @@ export default function AddTaskModal({
               }
               placeholder="Start writing here..."
               rows={6}
+              className="p-4"
             />
           </div>
         </div>
 
-        <div className="px-6 py-4 border-t flex items-center justify-between">
+        {/* Footer */}
+        <div className="px-8 py-5 border-t flex items-center justify-between">
           <button
             onClick={handleSubmit}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium cursor-pointer"
+            className="px-7 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium cursor-pointer"
           >
             Done
           </button>
+
           <button
             onClick={handleDelete}
-            className="w-10 h-10 bg-pink-500 hover:bg-pink-600 text-white rounded-lg flex items-center justify-center transition-colors"
+            className="w-11 h-11 bg-pink-500 hover:bg-pink-600 text-white rounded-lg flex items-center justify-center transition-colors"
           >
             <Trash2 className="w-5 h-5" />
           </button>

@@ -32,20 +32,18 @@ export default function Todos({ todos, onTodoCreated }: TodosProps) {
 
   return (
     <div className="h-full flex flex-col p-6">
-      {/* Header */}
       <div className="mb-6 flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold text-gray-800">Todos</h1>
           <button
             onClick={() => setShowAddTaskModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer"
           >
             <Plus className="w-5 h-5" />
             New Task
           </button>
         </div>
 
-        {/* Search & Filter */}
         <div className="flex gap-3">
           <div className="flex-1 relative">
             <input
@@ -100,7 +98,6 @@ export default function Todos({ todos, onTodoCreated }: TodosProps) {
         </div>
       </div>
 
-      {/* Todos List / Empty State */}
       {todos.length === 0 ? (
         <div className="flex-1 flex items-center justify-center">
           <div className="w-full h-full bg-white flex items-center justify-center rounded-xl shadow-sm p-4">
@@ -117,7 +114,7 @@ export default function Todos({ todos, onTodoCreated }: TodosProps) {
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
           {todos.map((todo) => (
             <TodoCard
               key={todo.id}
@@ -130,7 +127,6 @@ export default function Todos({ todos, onTodoCreated }: TodosProps) {
         </div>
       )}
 
-      {/* Add Task Modal */}
       <AddTaskModal
         open={showAddTaskModal}
         onOpenChange={setShowAddTaskModal}

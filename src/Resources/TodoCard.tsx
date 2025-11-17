@@ -22,7 +22,6 @@ interface TodoCardProps {
   assignees?: Assignee[];
   onEdit?: () => void;
   onDelete?: () => void;
-  className?: string;
 }
 
 const priorityConfig: Record<Priority, { label: string; className: string }> = {
@@ -48,44 +47,47 @@ export default function TodoCard({
   assignees = [],
   onEdit,
   onDelete,
-  className = "",
 }: TodoCardProps) {
   const priorityInfo = priorityConfig[priority];
 
   return (
     <Card
-      className={`w-full hover:shadow-md transition-shadow bg-white ${className}`}
+      className={`w-full max-w-md hover:shadow-md transition-shadow bg-white rounded-2xl`}
     >
-      <CardHeader className="pb-3">
-        <div className="flex items-start justify-between gap-2">
-          <h3 className="text-base font-semibold text-gray-900 flex-1">
+      <CardHeader>
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="text-[18px] font-500 text-[#4B5563] flex-1 leading-snug">
             {title}
           </h3>
-          <div className="flex items-center gap-2">
-            <Badge className={`${priorityInfo.className} font-medium text-xs`}>
+          <div className="flex items-center gap-1">
+            <Badge
+              className={`${priorityInfo.className} font-medium text-xs px-3 py-1 rounded`}
+            >
               {priorityInfo.label}
             </Badge>
-            <button className="p-0.5 hover:bg-gray-100 rounded transition-colors">
-              <GripVertical className="w-4 h-4 text-gray-400" />
+            <button className="p-1 hover:bg-gray-100 rounded transition-colors">
+              <GripVertical className="w-6 h-6 text-gray-600" />
             </button>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
-        <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+      <CardContent className="space-y-1">
+        <p className="text-[14px] text-[#4B5563] leading-relaxed">
+          {description}
+        </p>
+        <div className="flex items-center justify-between pt-2">
           <span className="text-sm text-gray-500">Due {dueDate}</span>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
             <button
               onClick={onEdit}
-              className="p-1.5 hover:bg-blue-50 rounded transition-colors"
+              className="p-2 hover:bg-blue-50 rounded transition-colors bg-[#EEF7FF] cursor-pointer"
               aria-label="Edit task"
             >
               <Pencil className="w-4 h-4 text-blue-500" />
             </button>
             <button
               onClick={onDelete}
-              className="p-1.5 hover:bg-red-50 rounded transition-colors"
+              className="p-2 hover:bg-red-50 rounded transition-colors bg-[#EEF7FF] cursor-pointer"
               aria-label="Delete task"
             >
               <Trash2 className="w-4 h-4 text-red-500" />
