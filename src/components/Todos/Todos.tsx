@@ -10,6 +10,7 @@ import TodoCard from "@/Resources/TodoCard";
 
 interface TodosProps {
   todos: Todo[];
+  onTodoCreated: () => void;
 }
 
 interface Filters {
@@ -19,7 +20,7 @@ interface Filters {
   expires30Days: boolean;
 }
 
-export default function Todos({ todos }: TodosProps) {
+export default function Todos({ todos, onTodoCreated }: TodosProps) {
   const [showAddTaskModal, setShowAddTaskModal] = useState(false);
   const [showFilterMenu, setShowFilterMenu] = useState(false);
   const [filters, setFilters] = useState<Filters>({
@@ -116,7 +117,7 @@ export default function Todos({ todos }: TodosProps) {
           </div>
         </div>
       ) : (
-        <div className="flex flex-col gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {todos.map((todo) => (
             <TodoCard
               key={todo.id}
@@ -133,6 +134,7 @@ export default function Todos({ todos }: TodosProps) {
       <AddTaskModal
         open={showAddTaskModal}
         onOpenChange={setShowAddTaskModal}
+        onTodoCreated={onTodoCreated}
       />
     </div>
   );

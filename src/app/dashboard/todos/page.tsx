@@ -16,6 +16,7 @@ export default function Page() {
   const { token } = useAuth();
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshTodos, setRefreshTodos] = useState(false);
 
   useEffect(() => {
     if (!token) return;
@@ -44,9 +45,14 @@ export default function Page() {
     };
 
     fetchTodos();
-  }, [token]);
+  }, [token, refreshTodos]);
 
   if (loading) return <p>Loading todos...</p>;
 
-  return <Todos todos={todos} />;
+  return (
+    <Todos
+      todos={todos}
+      onTodoCreated={() => setRefreshTodos((prev) => !prev)}
+    />
+  );
 }

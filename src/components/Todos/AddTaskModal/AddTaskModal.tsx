@@ -17,11 +17,13 @@ import { useAuth } from "@/context/AuthContext";
 interface AddTaskModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onTodoCreated: () => void;
 }
 
 export default function AddTaskModal({
   open,
   onOpenChange,
+  onTodoCreated,
 }: AddTaskModalProps) {
   const [formData, setFormData] = useState({
     title: "",
@@ -44,7 +46,6 @@ export default function AddTaskModal({
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
-          // "Content-Type": "application/json" is not needed for formdata
         },
         body: new URLSearchParams({
           title: formData.title,
@@ -62,7 +63,7 @@ export default function AddTaskModal({
       toast.success("Todo created successfully!");
       console.log("Created Todo:", data);
 
-      // Reset form and close modal
+      onTodoCreated();
       setFormData({ title: "", date: "", priority: "", description: "" });
     } catch (error) {
       console.error(error);
@@ -97,9 +98,7 @@ export default function AddTaskModal({
           </div>
         </DialogHeader>
 
-        {/* Form Content */}
         <div className="px-6 py-6 space-y-5">
-          {/* Title */}
           <div>
             <Label htmlFor="title">Title</Label>
             <Input
@@ -113,7 +112,6 @@ export default function AddTaskModal({
             />
           </div>
 
-          {/* Date */}
           <div>
             <Label htmlFor="date">Date</Label>
             <div className="relative">
@@ -129,7 +127,6 @@ export default function AddTaskModal({
             </div>
           </div>
 
-          {/* Priority */}
           <div>
             <Label>Priority</Label>
             <div className="flex gap-6 mt-1">
@@ -168,7 +165,6 @@ export default function AddTaskModal({
             </div>
           </div>
 
-          {/* Task Description */}
           <div>
             <Label htmlFor="description">Task Description</Label>
             <Textarea
@@ -183,7 +179,6 @@ export default function AddTaskModal({
           </div>
         </div>
 
-        {/* Footer */}
         <div className="px-6 py-4 border-t flex items-center justify-between">
           <button
             onClick={handleSubmit}
