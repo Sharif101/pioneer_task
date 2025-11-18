@@ -55,7 +55,7 @@ export default function Page() {
       todos={todos}
       onTodoCreated={() => setRefreshTodos((prev) => !prev)}
       search={search}
-      setSearch={setSearch} // pass search state and updater
+      setSearch={setSearch}
     />
   );
 }
