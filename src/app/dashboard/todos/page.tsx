@@ -17,6 +17,7 @@ export default function Page() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshTodos, setRefreshTodos] = useState(false);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     if (!token) return;
@@ -24,7 +25,7 @@ export default function Page() {
     const fetchTodos = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/todos/`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/todos/?search=${search}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -45,7 +46,7 @@ export default function Page() {
     };
 
     fetchTodos();
-  }, [token, refreshTodos]);
+  }, [token, refreshTodos, search]);
 
   if (loading) return <p>Loading todos...</p>;
 
@@ -53,6 +54,8 @@ export default function Page() {
     <Todos
       todos={todos}
       onTodoCreated={() => setRefreshTodos((prev) => !prev)}
+      search={search}
+      setSearch={setSearch} // pass search state and updater
     />
   );
 }

@@ -13,6 +13,8 @@ import DeleteTaskModal from "./DeleteTaskModal/DeleteTaskModal";
 interface TodosProps {
   todos: Todo[];
   onTodoCreated: () => void;
+  search: string;
+  setSearch: (value: string) => void;
 }
 
 interface Filters {
@@ -22,7 +24,12 @@ interface Filters {
   expires30Days: boolean;
 }
 
-export default function Todos({ todos, onTodoCreated }: TodosProps) {
+export default function Todos({
+  todos,
+  onTodoCreated,
+  search,
+  setSearch,
+}: TodosProps) {
   const [showAddTaskModal, setShowAddTaskModal] = useState(false);
   const [showFilterMenu, setShowFilterMenu] = useState(false);
   const [filters, setFilters] = useState<Filters>({
@@ -57,6 +64,8 @@ export default function Todos({ todos, onTodoCreated }: TodosProps) {
             <input
               type="text"
               placeholder="Search your task here..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
               className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
             />
             <button className="absolute right-0 top-1/2 -translate-y-1/2 w-11 h-11 bg-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors">
