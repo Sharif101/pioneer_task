@@ -7,6 +7,7 @@ import noDataPic from "../../asstes/icon-no projects.png";
 import AddTaskModal from "./AddTaskModal/AddTaskModal";
 import { Todo } from "@/utils/types/todo";
 import TodoCard from "@/Resources/TodoCard";
+import UpdateTaskModal from "./UpdateTaskModal/UpdateTaskModal";
 
 interface TodosProps {
   todos: Todo[];
@@ -29,6 +30,9 @@ export default function Todos({ todos, onTodoCreated }: TodosProps) {
     expires10Days: false,
     expires30Days: false,
   });
+
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   return (
     <div className="h-full flex flex-col p-6">
@@ -122,6 +126,10 @@ export default function Todos({ todos, onTodoCreated }: TodosProps) {
               description={todo.description}
               dueDate={todo.todo_date}
               priority={todo.priority as "extreme" | "moderate" | "low"}
+              onEdit={() => {
+                setSelectedTodo(todo);
+                setShowUpdateModal(true);
+              }}
             />
           ))}
         </div>
@@ -131,6 +139,13 @@ export default function Todos({ todos, onTodoCreated }: TodosProps) {
         open={showAddTaskModal}
         onOpenChange={setShowAddTaskModal}
         onTodoCreated={onTodoCreated}
+      />
+
+      <UpdateTaskModal
+        open={showUpdateModal}
+        onOpenChange={setShowUpdateModal}
+        todo={selectedTodo}
+        onTodoUpdated={onTodoCreated}
       />
     </div>
   );
