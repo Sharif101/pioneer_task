@@ -1,31 +1,32 @@
-# Seller Dashboard – Project Documentation
+# Todo App — Next.js + TypeScript
 
-# Overview
+A modern, responsive Todo Management Application built with **Next.js**, **TypeScript**, **Tailwind CSS**, and **ShadCN UI**.
+This application includes a complete authentication system, user dashboard, profile management, and full CRUD functionality for todos.
 
-This project is a Seller Dashboard UI developed with a focus on clean layout and intuitive design. The primary goal is to provide a user-friendly interface for sellers to manage products and view orders. Although the backend functionality is not implemented yet, the UI components are designed and partially interactive.
+---
 
-# Features & Pages
+## Tech Stack
 
-Dashboard Layout :
-Navbar and Sidebar implemented for smooth navigation.
-Built with a responsive structure to support various screen sizes.
+- **Next.js** (App Router)
+- **TypeScript**
+- **Tailwind CSS**
+- **ShadCN UI**
+- **Lucide Icons**
+- **REST API Integration**
 
-Overview Page :
-Designed for a quick glance at performance indicators.
+---
 
-Product List Page :
-Displays a list of existing products in a clean tabular format.
+## Features
 
-Add Product Page :
-Allows the addition of new products.
-Includes a drag-and-drop file upload feature for product images.
-Integrated React Select for category and other dropdowns (reusable).
-Newly added product data is shown in the console log for verification.
+- User Registration
+- User Login
+- Token-based Authentication
+- Protected Pages
+- User Profile Page
+- Todo list with Search
+- Create Todo
+- Update Todo
+- Delete Todo
+- Logout
 
-Order List
-UI designed for listing customer orders.
-Includes a search bar to filter orders.
-
-Order View
-On clicking “View”, a modal popup displays the detailed view of an order.
-.
+---
