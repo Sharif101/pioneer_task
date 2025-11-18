@@ -8,19 +8,11 @@ import { formatDueDate } from "@/utils/formatDate";
 
 type Priority = "extreme" | "moderate" | "low";
 
-interface Assignee {
-  id: string;
-  name: string;
-  initials: string;
-  color: string;
-}
-
 interface TodoCardProps {
   title: string;
   description: string;
   dueDate: string;
   priority: Priority;
-  assignees?: Assignee[];
   onEdit?: () => void;
   onDelete?: () => void;
 }
@@ -45,7 +37,6 @@ export default function TodoCard({
   description,
   dueDate,
   priority,
-  assignees = [],
   onEdit,
   onDelete,
 }: TodoCardProps) {

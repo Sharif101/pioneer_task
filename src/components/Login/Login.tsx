@@ -13,6 +13,12 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
+// Type for form errors
+type LoginErrors = {
+  email?: string;
+  password?: string;
+};
+
 export default function Login() {
   const router = useRouter();
   const { login } = useAuth();
@@ -22,9 +28,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
-    {}
-  );
+  const [errors, setErrors] = useState<LoginErrors>({});
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -32,8 +36,7 @@ export default function Login() {
     e.preventDefault();
     setIsLoading(true);
 
-    // Field-level validation
-    const newErrors: any = {};
+    const newErrors: LoginErrors = {};
 
     if (!email) newErrors.email = "Email is required.";
     if (!password) newErrors.password = "Password is required.";
@@ -45,7 +48,7 @@ export default function Login() {
       return;
     }
 
-    setErrors({}); // clear old errors
+    setErrors({});
 
     try {
       const res = await fetch(`${API_URL}/api/auth/login/`, {
@@ -64,9 +67,9 @@ export default function Login() {
 
       toast.success("Login successful!");
       login(data.access);
+
       router.push("/dashboard/todos");
-      console.log({ data });
-    } catch (error) {
+    } catch {
       toast.error("Something went wrong!");
     } finally {
       setIsLoading(false);
@@ -75,7 +78,6 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-gray-900 flex">
-      {/* Left Side - Image */}
       <div className="hidden lg:flex lg:w-1/2 bg-[#E2ECF8] items-center justify-center relative">
         <Image
           src={loginPic}
@@ -86,7 +88,6 @@ export default function Login() {
         />
       </div>
 
-      {/* Right Side - Form */}
       <div className="w-full lg:w-1/2 bg-white flex items-center justify-center p-8">
         <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6">
           <div className="space-y-2">
@@ -98,7 +99,6 @@ export default function Login() {
             </p>
           </div>
 
-          {/* Email */}
           <div className="space-y-2">
             <Label htmlFor="email" className="text-gray-700 font-medium">
               Email
@@ -118,7 +118,6 @@ export default function Login() {
             )}
           </div>
 
-          {/* Password */}
           <div className="space-y-2 relative">
             <Label htmlFor="password" className="text-gray-700 font-medium">
               Password
@@ -147,7 +146,6 @@ export default function Login() {
             )}
           </div>
 
-          {/* Remember Me */}
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Checkbox
@@ -166,11 +164,10 @@ export default function Login() {
               href="#"
               className="text-blue-600 hover:underline text-sm font-medium"
             >
-              Forgot your password?
+              Forgot password?
             </Link>
           </div>
 
-          {/* Submit Button */}
           <Button
             type="submit"
             disabled={isLoading}
@@ -180,7 +177,7 @@ export default function Login() {
           </Button>
 
           <p className="text-center text-gray-600 text-sm">
-            Don{"'"}t have an account?{" "}
+            Dont have an account?
             <Link
               href="/registerform"
               className="text-blue-600 hover:underline font-medium"

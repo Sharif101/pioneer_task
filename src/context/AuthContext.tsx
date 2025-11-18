@@ -1,12 +1,33 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from "react";
 
-const AuthContext = createContext<any>(null);
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+interface AuthContextType {
+  token: string | null;
+  user: User | null;
+  loading: boolean;
+  login: (accessToken: string) => void;
+  logout: () => void;
+  isAuthenticated: boolean;
+}
+
+const AuthContext = createContext<AuthContextType | null>(null);
+
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -52,7 +73,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const data = await res.json();
       setUser(data);
     } catch (err) {
-      console.error(err);
+      console.error("Error fetching user:", err);
     }
   };
 
@@ -61,9 +82,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         token,
         user,
+        loading,
         login,
         logout,
-        loading,
         isAuthenticated: !!token,
       }}
     >
@@ -72,4 +93,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) throw new Error("useAuth must be used inside AuthProvider");
+  return context;
+};

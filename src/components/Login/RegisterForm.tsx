@@ -68,7 +68,7 @@ export default function RegisterForm() {
 
       toast.success("Account created successfully!");
       router.push("/");
-    } catch (error) {
+    } catch {
       toast.error("Something went wrong. Try again.");
     } finally {
       setIsLoading(false);
@@ -77,7 +77,6 @@ export default function RegisterForm() {
 
   return (
     <div className="min-h-screen bg-gray-900 flex">
-      {/* Left Side - Image */}
       <div className="hidden lg:flex lg:w-1/2 bg-[#E2ECF8] items-center justify-center relative">
         <Image
           src={regPic}
@@ -88,7 +87,6 @@ export default function RegisterForm() {
         />
       </div>
 
-      {/* Right Side - Form */}
       <div className="w-full lg:w-1/2 bg-white flex items-center justify-center p-8">
         <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6">
           <div className="space-y-2">
@@ -100,7 +98,6 @@ export default function RegisterForm() {
             </p>
           </div>
 
-          {/* Name Fields */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="firstName" className="text-gray-700 font-medium">
@@ -130,7 +127,6 @@ export default function RegisterForm() {
             </div>
           </div>
 
-          {/* Email Field */}
           <div className="space-y-2">
             <Label htmlFor="email" className="text-gray-700 font-medium">
               Email
@@ -145,7 +141,6 @@ export default function RegisterForm() {
             />
           </div>
 
-          {/* Password Field */}
           <div className="space-y-2 relative">
             <Label htmlFor="password" className="text-gray-700 font-medium">
               Password
@@ -169,7 +164,6 @@ export default function RegisterForm() {
             </div>
           </div>
 
-          {/* Confirm Password Field */}
           <div className="space-y-2 relative">
             <Label
               htmlFor="confirmPassword"
@@ -200,10 +194,8 @@ export default function RegisterForm() {
             </div>
           </div>
 
-          {/* Error Message */}
           {error && <p className="text-red-500 text-sm">{error}</p>}
 
-          {/* Sign Up Button */}
           <Button
             type="submit"
             disabled={isLoading}
@@ -212,7 +204,6 @@ export default function RegisterForm() {
             {isLoading ? "Creating..." : "Sign Up"}
           </Button>
 
-          {/* Login Link */}
           <p className="text-center text-gray-600 text-sm">
             Already have an account?{" "}
             <Link

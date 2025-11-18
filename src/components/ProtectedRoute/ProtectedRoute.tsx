@@ -16,7 +16,7 @@ export default function ProtectedRoute({
     if (!loading && !token) {
       router.replace("/");
     }
-  }, [loading, token]);
+  }, [loading, token, router]);
 
   if (loading) return null;
   if (!token) return null;

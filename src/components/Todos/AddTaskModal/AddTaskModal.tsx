@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import {
   Dialog,

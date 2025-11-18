@@ -8,21 +8,25 @@ import profilePic from "../../asstes/Ellipse 1.png";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
 
-const menuItems = [
+interface UserType {
+  first_name: string;
+  last_name: string;
+  email: string;
+  id?: string;
+}
+
+interface MenuItem {
+  id: number;
+  label: string;
+  href: string;
+  icon: React.ComponentType<{ className?: string }>;
+}
+
+const menuItems: MenuItem[] = [
+  { id: 1, label: "Dashboard", href: "/dashboard", icon: Home },
+  { id: 2, label: "Todos", href: "/dashboard/todos", icon: IoCheckmarkDone },
   {
-    id: 1,
-    label: "Dashboard",
-    href: "#",
-    icon: Home,
-  },
-  {
-    id: 1,
-    label: "Todos",
-    href: "/dashboard/todos",
-    icon: IoCheckmarkDone,
-  },
-  {
-    id: 4,
+    id: 3,
     label: "Account Information",
     href: "/dashboard/acountinfo",
     icon: IoPersonCircle,
@@ -31,7 +35,9 @@ const menuItems = [
 
 export function Sidebar() {
   const pathname = usePathname();
+
   const { logout, user } = useAuth();
+  const typedUser = user as UserType | null;
 
   return (
     <div className="w-72 bg-gradient-to-b from-blue-900 to-blue-950 text-white flex flex-col">
@@ -46,19 +52,19 @@ export function Sidebar() {
           />
         </div>
         <h3 className="font-semibold text-lg">
-          {user?.first_name} {user?.last_name}
+          {typedUser?.first_name} {typedUser?.last_name}
         </h3>
-        <p className="text-sm text-blue-300">{user?.email}</p>
+        <p className="text-sm text-blue-300">{typedUser?.email}</p>
       </div>
 
       <nav className="flex-1 py-6 space-y-1">
-        {menuItems.map((item, index) => {
+        {menuItems.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.href;
 
           return (
             <Link
-              key={index}
+              key={item.id}
               href={item.href}
               className={`flex items-center px-6 py-3 transition-colors ${
                 isActive
