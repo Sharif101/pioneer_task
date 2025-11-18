@@ -4,6 +4,7 @@ import React from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Pencil, Trash2, GripVertical } from "lucide-react";
+import { formatDueDate } from "@/utils/formatDate";
 
 type Priority = "extreme" | "moderate" | "low";
 
@@ -56,7 +57,7 @@ export default function TodoCard({
     >
       <CardHeader>
         <div className="flex items-start justify-between gap-3">
-          <h3 className="text-[18px] font-500 text-[#4B5563] flex-1 leading-snug">
+          <h3 className="text-[18px] font-500 text-[#4B5563] flex-1 leading-snug capitalize">
             {title}
           </h3>
           <div className="flex items-center gap-1">
@@ -72,11 +73,13 @@ export default function TodoCard({
         </div>
       </CardHeader>
       <CardContent className="space-y-1">
-        <p className="text-[14px] text-[#4B5563] leading-relaxed">
+        <p className="text-[14px] text-[#4B5563] leading-relaxed capitalize">
           {description}
         </p>
         <div className="flex items-center justify-between pt-2">
-          <span className="text-sm text-gray-500">Due {dueDate}</span>
+          <span className="text-sm text-gray-500">
+            Due {formatDueDate(dueDate)}
+          </span>
           <div className="flex items-center gap-2">
             <button
               onClick={onEdit}
