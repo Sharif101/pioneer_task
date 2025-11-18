@@ -8,6 +8,7 @@ import AddTaskModal from "./AddTaskModal/AddTaskModal";
 import { Todo } from "@/utils/types/todo";
 import TodoCard from "@/Resources/TodoCard";
 import UpdateTaskModal from "./UpdateTaskModal/UpdateTaskModal";
+import DeleteTaskModal from "./DeleteTaskModal/DeleteTaskModal";
 
 interface TodosProps {
   todos: Todo[];
@@ -33,6 +34,9 @@ export default function Todos({ todos, onTodoCreated }: TodosProps) {
 
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteTodoId, setDeleteTodoId] = useState<number | null>(null);
 
   return (
     <div className="h-full flex flex-col p-6">
@@ -130,6 +134,10 @@ export default function Todos({ todos, onTodoCreated }: TodosProps) {
                 setSelectedTodo(todo);
                 setShowUpdateModal(true);
               }}
+              onDelete={() => {
+                setDeleteTodoId(todo.id);
+                setShowDeleteModal(true);
+              }}
             />
           ))}
         </div>
@@ -146,6 +154,13 @@ export default function Todos({ todos, onTodoCreated }: TodosProps) {
         onOpenChange={setShowUpdateModal}
         todo={selectedTodo}
         onTodoUpdated={onTodoCreated}
+      />
+
+      <DeleteTaskModal
+        open={showDeleteModal}
+        onOpenChange={setShowDeleteModal}
+        todoId={deleteTodoId}
+        onTodoDeleted={onTodoCreated}
       />
     </div>
   );
